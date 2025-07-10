@@ -1,42 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>@yield('title') - Coffee Company</title>
+    <meta charset="UTF-8">
+    <title>@yield('title', 'Coffee Company')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f8f5f0; }
-        footer { background: #222; color: white; padding: 20px; margin-top: 40px; text-align: center; }
-    </style>
+    @stack('styles')
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">☕ Coffee Company</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand" href="/">Coffee Company</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                @auth
-                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                @else
-                <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
-                <li class="nav-item"><a class="nav-link" href="/tentang">Tentang</a></li>
-                <li class="nav-item"><a class="nav-link" href="/produk">Produk</a></li>
-                <li class="nav-item"><a class="nav-link" href="/kontak">Kontak</a></li>
-                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                @endauth
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->is('produk*') ? 'active' : '' }}" href="/produk">Produk</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->is('jelajahi*') ? 'active' : '' }}" href="/jelajahi"></a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->is('tentang') ? 'active' : '' }}" href="/tentang">Tentang Kami</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->is('kontak') ? 'active' : '' }}" href="/kontak">Kontak</a></li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('cart') ? 'active' : '' }}" href="{{ route('cart.index') }}">
+                        🛒 Keranjang ({{ session('cart') ? count(session('cart')) : 0 }})
+                    </a>
+                </li>
             </ul>
+            <div class="d-flex align-items-center">
+                @auth
+                    <span class="navbar-text me-3">Halo, {{ Auth::user()->name }}</span>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button class="btn btn-sm btn-outline-light">Logout</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-light">Login</a>
+                @endauth
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
+<main class="pt-5 mt-4">
     @yield('content')
-</div>
+</main>
 
-<footer>&copy; {{ date('Y') }} Coffee Company</footer>
 </body>
 </html>

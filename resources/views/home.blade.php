@@ -3,7 +3,7 @@
 <head>
     <title>Beranda - Coffee Company</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap JS -->
@@ -51,6 +51,10 @@
             background-color: #6f4e37;
             color: white;
             border: none;
+            padding: 10px 24px;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: 0.3s ease;
         }
 
         .btn-coffee:hover {
@@ -63,7 +67,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">Coffee Company</a>
+        <a class="navbar-brand" href="/">Coffee Company</a>
 
         <!-- Hamburger Menu -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCoffee" aria-controls="navbarCoffee" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,11 +77,13 @@
         <!-- Menu Items -->
         <div class="collapse navbar-collapse" id="navbarCoffee">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/">Beranda</a></li>
                 <li class="nav-item"><a class="nav-link" href="/produk">Produk</a></li>
+                <li class="nav-item"><a class="nav-link" href="/jelajahi"></a></li>
                 <li class="nav-item"><a class="nav-link" href="/tentang">Tentang Kami</a></li>
                 <li class="nav-item"><a class="nav-link" href="/kontak">Kontak</a></li>
-            </ul>            
+                <li class="nav-item"><a class="nav-link" href="{{ route('cart.index') }}">🛒 Keranjang</a></li>
+            </ul>
 
             <div class="d-flex align-items-center">
                 <span class="navbar-text me-3">Halo, {{ Auth::user()->name }}</span>
@@ -95,7 +101,7 @@
     <div class="container">
         <h1>Selamat Datang di Perusahaan Kopi</h1>
         <p>Kami menyajikan kopi terbaik dari petani lokal Indonesia.</p>
-        <a href="#" class="btn btn-coffee mt-3">Jelajahi Produk</a>
+        <a href="/jelajahi" class="btn btn-coffee mt-3">Jelajahi Produk</a>
     </div>
 </section>
 
