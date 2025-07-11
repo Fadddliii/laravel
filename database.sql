@@ -1,4 +1,3 @@
--- versi terbaru commit
 --
 -- PostgreSQL database dump
 --
@@ -180,6 +179,45 @@ ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
 
 
 --
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.orders (
+    id bigint NOT NULL,
+    customer_name character varying(255) NOT NULL,
+    address text NOT NULL,
+    product_name character varying(255) NOT NULL,
+    quantity integer NOT NULL,
+    total_price integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.orders OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.orders_id_seq OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
+
+--
 -- Name: password_reset_tokens; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -191,6 +229,45 @@ CREATE TABLE public.password_reset_tokens (
 
 
 ALTER TABLE public.password_reset_tokens OWNER TO postgres;
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    description text NOT NULL,
+    category character varying(255) NOT NULL,
+    price numeric(10,2) NOT NULL,
+    image character varying(255),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.products_id_seq OWNER TO postgres;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
 
 --
 -- Name: sessions; Type: TABLE; Schema: public; Owner: postgres
@@ -267,6 +344,20 @@ ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.m
 
 
 --
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -322,6 +413,20 @@ COPY public.migrations (id, migration, batch) FROM stdin;
 2	0001_01_01_000001_create_cache_table	1
 3	0001_01_01_000002_create_jobs_table	1
 4	2025_07_08_062052_create_users_table	2
+5	2025_07_10_014744_create_products_table	3
+6	2025_07_10_043246_create_orders_table	4
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.orders (id, customer_name, address, product_name, quantity, total_price, created_at, updated_at) FROM stdin;
+4	fadli	jln.jalan no.07	Kopi Arabika Toraja	1	85000	2025-07-10 06:10:27	2025-07-10 06:10:27
+5	azka	jl.awiligar no 123	Kopi Arabika Toraja	2	170000	2025-07-10 06:12:01	2025-07-10 06:12:01
+6	ujang	jl.bagong no 154	Kopi Arabika Toraja	6	510000	2025-07-10 09:29:42	2025-07-10 09:29:42
+7	udin	jl jalan no.98	Kopi Arabika Toraja	5	425000	2025-07-11 01:08:40	2025-07-11 01:08:40
 \.
 
 
@@ -334,11 +439,23 @@ COPY public.password_reset_tokens (email, token, created_at) FROM stdin;
 
 
 --
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (id, name, description, category, price, image, created_at, updated_at) FROM stdin;
+1	Kopi Arabika Toraja	Kopi khas Toraja dengan rasa earthy dan aroma rempah.	Arabika	85000.00	toraja.jpg	2025-07-10 03:02:22	2025-07-10 03:02:22
+2	Kopi Robusta Lampung	Kopi khas Lampung dengan rasa kuat dan pahit khas robusta.	Robusta	65000.00	robusta.jpg	2025-07-10 03:18:35	2025-07-10 03:18:35
+3	Kopi Blend Premium	Campuran kopi arabika dan robusta untuk rasa yang seimbang.	premium	85000.00	premium.jpg	2025-07-10 03:21:43	2025-07-10 03:21:43
+\.
+
+
+--
 -- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.sessions (id, user_id, ip_address, user_agent, payload, last_activity) FROM stdin;
-gR56BXXq7FXYIK3ykE9pzapdByJChW3imf8RVCoo	3	127.0.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	YTo0OntzOjY6Il90b2tlbiI7czo0MDoidk02aW5GUFBKbXpzVzREdDgzc0R6Q203YmNRSkFlcm02STVKY3hDcCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM7fQ==	1751960496
+1UX87tIrgOscTBP7SQCeIGvxAMsnk1CFYsX5TSHj	\N	127.0.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	YTozOntzOjY6Il90b2tlbiI7czo0MDoiUjhGMnduSjJwaTVoNFBQTVpWeVZWb2hTTjFxMFdMaHdKUlRGTVl6ZyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==	1752196053
+bzrSFe0MSCzRBqUagbMXvvfiaSVWyLJOM4YqruF1	3	127.0.0.1	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36	YTo2OntzOjY6Il90b2tlbiI7czo0MDoiM0NmYkJUdFRxdWNCU1F0cTRIaG56Tm9adzRrcW1idkpFbFFrcWlyViI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9qZWxhamFoaSI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjM7czo0OiJjYXJ0IjthOjE6e2k6MTthOjQ6e3M6NDoibmFtZSI7czoxOToiS29waSBBcmFiaWthIFRvcmFqYSI7czo1OiJwcmljZSI7czo4OiI4NTAwMC4wMCI7czo1OiJpbWFnZSI7czoxMDoidG9yYWphLmpwZyI7czo4OiJxdWFudGl0eSI7aToxO319fQ==	1752203818
 \.
 
 
@@ -349,6 +466,7 @@ gR56BXXq7FXYIK3ykE9pzapdByJChW3imf8RVCoo	3	127.0.0.1	Mozilla/5.0 (Windows NT 10.
 COPY public.users (id, name, email, password, created_at, updated_at) FROM stdin;
 1	Fadli	fadli@example.com	$2y$12$c2waggvTfxvCgFyYEoL0euo9yHZdwvAsYykAyyeF6phBScCNl.xVC	2025-07-08 06:34:21	2025-07-08 06:34:21
 3	ujang	ujang@gmail.com	$2y$12$F/CQZd2k3cwE69hqV54CtOGvViIaaJaYin6QdlPF/T/P2sv.Pklx.	2025-07-08 07:24:20	2025-07-08 07:24:20
+4	Alpayat	onyetjoged@gmail.com	$2y$12$3FsQM5NPCtiNHWQ2fCs3b.sM2gamRxulg1NOacOJ5UjMp3iBZhCl2	2025-07-09 11:36:20	2025-07-09 11:36:20
 \.
 
 
@@ -370,14 +488,28 @@ SELECT pg_catalog.setval('public.jobs_id_seq', 1, false);
 -- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.migrations_id_seq', 4, true);
+SELECT pg_catalog.setval('public.migrations_id_seq', 6, true);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.orders_id_seq', 7, true);
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 9, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+SELECT pg_catalog.setval('public.users_id_seq', 4, true);
 
 
 --
@@ -437,11 +569,27 @@ ALTER TABLE ONLY public.migrations
 
 
 --
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: password_reset_tokens password_reset_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.password_reset_tokens
     ADD CONSTRAINT password_reset_tokens_pkey PRIMARY KEY (email);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
 
 
 --
