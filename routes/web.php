@@ -6,45 +6,64 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\JelajahiController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AdminController;
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+/**
+ * Guest Routes
+ */
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/register', [AuthController::class, 'showRegisterForm']);
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->middleware('guest');
 Route::post('/register', [AuthController::class, 'register']);
 
+/**
+ * Public Home (harus login)
+ */
 Route::get('/', function () {
     return view('home');
 })->middleware('auth');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+/**
+ * Logout
+ */
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-
-Route::view('/produk', 'produk');
-Route::view('/tentang', 'tentang');
-Route::view('/kontak', 'kontak');
-
-Route::get('/produk', [ProductController::class, 'index']);
-
+/**
+ * Produk dan Jelajahi
+ */
+Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
 Route::get('/jelajahi', [JelajahiController::class, 'index'])->middleware('auth');
 
-Route::get('/beli/{id}', [OrderController::class, 'create'])->name('order.create');
-Route::post('/beli', [OrderController::class, 'store'])->name('order.store');
+/**
+ * Halaman Informasi
+ */
+Route::view('/tentang', 'tentang')->middleware('auth');
+Route::view('/kontak', 'kontak')->middleware('auth');
 
+/**
+ * Order Produk (Beli Sekarang)
+ */
+Route::get('/beli/{id}', [OrderController::class, 'create'])->name('order.create')->middleware('auth');
+Route::post('/beli', [OrderController::class, 'store'])->name('order.store')->middleware('auth');
+
+/**
+ * Cart System
+ */
 Route::middleware(['auth'])->group(function () {
-    // Tampilkan halaman keranjang
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-
-    // Tambah item ke keranjang
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-
-    // Perbarui jumlah item di keranjang
-    Route::delete('/cart/update', [CartController::class, 'update'])->name('cart.update');
-    
-
-    // Hapus satu item (DELETE)
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-
-    // Checkout (simpan pesanan)
+    Route::delete('/cart/update', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/riwayat', [CartController::class, 'history'])->name('cart.history');
+});
+
+/**
+ * Admin Dashboard - akses hanya untuk user dengan role admin
+ */
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/orders', [CartController::class, 'adminOrders'])->name('admin.orders');
 });
