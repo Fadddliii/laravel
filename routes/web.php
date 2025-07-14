@@ -21,7 +21,7 @@ Route::post('/register', [AuthController::class, 'register']);
  * Public Home (harus login)
  */
 Route::get('/', function () {
-    return view('home');
+    return view('coffee');
 })->middleware('auth');
 
 /**
