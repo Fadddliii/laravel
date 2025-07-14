@@ -83,9 +83,17 @@ body {
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-start mb-4">
-                    <button type="submit" class="btn btn-warning btn-coffee">Perbarui Keranjang</button>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-warning">Perbarui Keranjang</button>
+                    <button class="btn btn-success" data-bs-toggle="collapse" data-bs-target="#checkoutForm">Checkout</button>
                 </div>
+                
+                <form action="{{ route('cart.clear') }}" method="POST" class="mt-2" onsubmit="return confirm('Yakin ingin mengosongkan seluruh keranjang?')">
+                    @csrf
+                    <button class="btn btn-outline-danger">Hapus Semua</button>
+                </form>
+                
+
             </form>
 
             <hr class="my-5">

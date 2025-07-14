@@ -10,6 +10,12 @@
     @stack('styles')
 </head>
 <body class="bg-light">
+    @if(session('success'))
+    <div class="alert alert-success mt-3 text-center">
+        {{ session('success') }}
+    </div>
+@endif
+
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">

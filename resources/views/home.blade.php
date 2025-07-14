@@ -83,6 +83,12 @@
                 <li class="nav-item"><a class="nav-link" href="/tentang">Tentang Kami</a></li>
                 <li class="nav-item"><a class="nav-link" href="/kontak">Kontak</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('cart.index') }}">🛒 Keranjang</a></li>
+                @if (Auth::user() && Auth::user()->role === 'admin')
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+    </li>
+@endif
+
             </ul>
 
             <div class="d-flex align-items-center">

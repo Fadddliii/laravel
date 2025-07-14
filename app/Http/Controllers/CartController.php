@@ -99,5 +99,17 @@ class CartController extends Controller
 
         return redirect('/produk')->with('success', 'Pesanan berhasil dibuat!');
     }
+    public function clear()
+{
+    session()->forget('cart');
+    return redirect()->route('cart.index')->with('success', 'Keranjang berhasil dikosongkan.');
+}
+public function history()
+{
+    $orders = Order::latest()->get(); // atau filter sesuai user kalau sudah autentikasi real
+    return view('cart.history', compact('orders'));
+}
+
+
 }
 

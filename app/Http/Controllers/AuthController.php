@@ -13,17 +13,34 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+    
+        return redirect('/'); // user biasa ke homepage
+    }
+    
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials)) {
-            return redirect('/');
+            $request->session()->regenerate();
+    
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+    
+            return redirect()->intended('/');
         }
-
-        return back()->withErrors(['email' => 'Email atau password salah.']);
+    
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
     }
+    
 
     public function showRegisterForm()
     {
